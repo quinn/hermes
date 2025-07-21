@@ -88,7 +88,8 @@ var installCmd = &cobra.Command{
 				url, ok := files[variant]
 				if !ok {
 					fmt.Printf("Variant %s not found for %s\n", variant, entry.Family)
-					continue
+					fmt.Println("Available variants:", item.Variants)
+					os.Exit(1)
 				}
 				fileName := item.Family + "_" + variant + ".woff2"
 				filePath := filepath.Join(cfg.Dir, fileName)
@@ -97,7 +98,7 @@ var installCmd = &cobra.Command{
 				}
 				if err := downloadToFile(url, filePath); err != nil {
 					fmt.Printf("Failed to download %s: %v\n", fileName, err)
-					continue
+					os.Exit(1)
 				}
 				wantedFiles[fileName] = struct{}{}
 				cssRules = append(cssRules, genCSS(item.Family, variant, fileName))
